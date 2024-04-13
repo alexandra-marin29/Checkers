@@ -17,7 +17,9 @@ namespace Checkers.Models
         public PlayerTurn(PieceColor color)
         {
             this.color = color;
-            loadImages();
+            TurnImage = color == PieceColor.White ? Utility.whitePiece : Utility.redPiece;
+
+            //loadImages();
         }
 
         public void loadImages()

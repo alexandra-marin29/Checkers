@@ -234,7 +234,11 @@ namespace Checkers.Services
                             MessageBox.Show("Error parsing player turn.");
                             return;
                         }
-                        gameLogic.Turn = new PlayerTurn(turnColor);
+                        PlayerTurn newTurn = new PlayerTurn(turnColor);
+                        newTurn.TurnImage = turnColor == PieceColor.White ? Utility.whitePiece : Utility.redPiece;
+
+                        gameLogic.Turn = newTurn;
+                        Utility.Turn = newTurn;
 
                         string text = reader.ReadLine();
                         if (text != NO_PIECE.ToString())

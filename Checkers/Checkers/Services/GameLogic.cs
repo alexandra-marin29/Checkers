@@ -173,11 +173,11 @@ namespace Checkers.Services
             Utility.LoadGame(board,this);
             if (Turn.PlayerColor == PieceColor.Red)
             {
-                Turn.TurnImage = Utility.whitePiece;
+                Turn.TurnImage = Utility.redPiece;
             }
             if(Turn.PlayerColor == PieceColor.White)
             {
-                Turn.TurnImage = Utility.redPiece;
+                Turn.TurnImage = Utility.whitePiece;
             }
         }
 
