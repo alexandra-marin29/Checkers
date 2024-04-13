@@ -12,67 +12,68 @@ using System.Runtime.CompilerServices;
 
 namespace Checkers.Services
 {
-    public class GameLogic: INotifyPropertyChanged
+    public class GameLogic : INotifyPropertyChanged
     {
-        private ObservableCollection<ObservableCollection<GameSquare>> board;
-        private PlayerTurn playerTurn;
-        private Winner winner;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private ObservableCollection<ObservableCollection<GameSquare>> board;
+        public PlayerTurn Turn { get; set; }
+        private Winner winner;
         private int _whitePiecesRemaining;
         private int _redPiecesRemaining;
-
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
 
         public int WhitePiecesRemaining
         {
             get => _whitePiecesRemaining;
-            private set
+            set
             {
                 _whitePiecesRemaining = value;
-                NotifyPropertyChanged(nameof(WhitePiecesRemaining));
+                NotifyPropertyChanged();
             }
         }
 
         public int RedPiecesRemaining
         {
             get => _redPiecesRemaining;
-            private set
+            set
             {
                 _redPiecesRemaining = value;
-                NotifyPropertyChanged(nameof(RedPiecesRemaining));
+                NotifyPropertyChanged();
             }
         }
 
-        public GameLogic(ObservableCollection<ObservableCollection<GameSquare>> board, PlayerTurn playerTurn, Winner winner)
+        public GameLogic(ObservableCollection<ObservableCollection<GameSquare>> board, PlayerTurn turn, Winner winner)
         {
             this.board = board;
-            this.playerTurn = playerTurn;
+            this.Turn = turn;
             this.winner = winner;
             this.winner.RedWins = Utility.getScore().RedWins;
             this.winner.WhiteWins = Utility.getScore().WhiteWins;
             WhitePiecesRemaining = 12;
             RedPiecesRemaining = 12;
         }
-        #region Logics
-        private void SwitchTurns(GameSquare square)
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    
+    #region Logics
+    private void SwitchTurns(GameSquare square)
         {
             if (square.Piece.Color == PieceColor.Red)
             {
                 Utility.Turn.PlayerColor = PieceColor.White;
                 Utility.Turn.TurnImage = Utility.whitePiece;
-                playerTurn.PlayerColor = PieceColor.White;
-                playerTurn.TurnImage = Utility.whitePiece;
+                Turn.PlayerColor = PieceColor.White;
+                Turn.TurnImage = Utility.whitePiece;
             }
             else
             {
                 Utility.Turn.PlayerColor = PieceColor.Red;
                 Utility.Turn.TurnImage = Utility.redPiece;
-                playerTurn.PlayerColor = PieceColor.Red;
-                playerTurn.TurnImage = Utility.redPiece;
+                Turn.PlayerColor = PieceColor.Red;
+                Turn.TurnImage = Utility.redPiece;
             }
         }
 
@@ -155,18 +156,18 @@ namespace Checkers.Services
 
         public void ResetGame()
         {
-            Utility.ResetGame(board);
+            Utility.ResetGame(board,this);
         }
 
         public void SaveGame()
         {
-            Utility.SaveGame(board);
+            Utility.SaveGame(board,this);
         }
 
         public void LoadGame()
         {
-            Utility.LoadGame(board);
-            playerTurn.TurnImage = Utility.Turn.TurnImage;
+            Utility.LoadGame(board,this);
+            Turn.TurnImage = Utility.Turn.TurnImage;
         }
 
         public void About()
@@ -185,22 +186,28 @@ namespace Checkers.Services
 
         public void MovePiece(GameSquare square)
         {
+            if (Utility.CurrentSquare == null || Utility.CurrentSquare.Piece == null)
+            {
+                MessageBox.Show("No piece selected to move, or the selected piece is invalid.");
+                return;  // Exit the method as there is no piece to move.
+            }
+
+            // Transfer the piece to the new square
             square.Piece = Utility.CurrentSquare.Piece;
             square.Piece.Square = square;
 
-            foreach (var pair in Utility.CurrentNeighbours)
+            // Handle capturing
+            if (Utility.CurrentNeighbours.ContainsKey(square) && Utility.CurrentNeighbours[square] != null)
             {
-                Console.WriteLine($"Neighbour Position: [{pair.Key.Row}, {pair.Key.Column}] - Has Neighbour: {pair.Value != null}");
-            }
-
-            if (Utility.CurrentNeighbours[square] != null)
-            {
+                // Remove the captured piece
                 Utility.CurrentNeighbours[square].Piece = null;
-                if (square.Piece.Color == PieceColor.Red)
-                    WhitePiecesRemaining--; 
-                else
-                    RedPiecesRemaining--;
                 Utility.ExtraMove = true;
+
+                // Decrement the count of the captured pieces
+                if (square.Piece.Color == PieceColor.Red)
+                    WhitePiecesRemaining--;  // Capturing a white piece by a red piece
+                else if (square.Piece.Color == PieceColor.White)
+                    RedPiecesRemaining--;  // Capturing a red piece by a white piece
             }
             else
             {
@@ -208,37 +215,37 @@ namespace Checkers.Services
                 SwitchTurns(Utility.CurrentSquare);
             }
 
+            // Clear board visuals
             board[Utility.CurrentSquare.Row][Utility.CurrentSquare.Column].Texture = Utility.redSquare;
-
             foreach (GameSquare selectedSquare in Utility.CurrentNeighbours.Keys)
             {
                 selectedSquare.LegalSquareSymbol = null;
             }
+
+            // Cleanup after move
             Utility.CurrentNeighbours.Clear();
             Utility.CurrentSquare.Piece = null;
             Utility.CurrentSquare = null;
 
+            // Promote to King if applicable
             if (square.Piece.Type == PieceType.Regular)
             {
-                if (square.Row == 0 && square.Piece.Color == PieceColor.Red)
+                if ((square.Piece.Color == PieceColor.Red && square.Row == 0) ||
+                    (square.Piece.Color == PieceColor.White && square.Row == board.Count - 1))
                 {
                     square.Piece.Type = PieceType.King;
-                    square.Piece.Texture = Utility.redKingPiece;
-                }
-                else if (square.Row == board.Count - 1 && square.Piece.Color == PieceColor.White)
-                {
-                    square.Piece.Type = PieceType.King;
-                    square.Piece.Texture = Utility.whiteKingPiece;
+                    square.Piece.Texture = square.Piece.Color == PieceColor.Red ? Utility.redKingPiece : Utility.whiteKingPiece;
                 }
             }
 
+            // Continue extra moves or check for game over
             if (Utility.ExtraMove)
             {
-                if (playerTurn.TurnImage == Utility.redPiece)
+                if (Turn.TurnImage == Utility.redPiece)
                 {
                     Utility.CollectedWhitePieces++;
                 }
-                if (playerTurn.TurnImage == Utility.whitePiece)
+                else if (Turn.TurnImage == Utility.whitePiece)
                 {
                     Utility.CollectedRedPieces++;
                 }
@@ -250,6 +257,13 @@ namespace Checkers.Services
                 GameOver();
             }
         }
+
+        public void ResetPieceCounts()
+        {
+            RedPiecesRemaining = 12; 
+            WhitePiecesRemaining = 12;
+        }
+
 
         public void GameOver()
         {
@@ -267,7 +281,7 @@ namespace Checkers.Services
             Utility.CollectedRedPieces = 0;
             Utility.CollectedWhitePieces = 0;
             MessageBox.Show("You won! You are the best <3");
-            Utility.ResetGame(board);
+            Utility.ResetGame(board,this);
         }
         #endregion 
     }

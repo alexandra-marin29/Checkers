@@ -44,7 +44,12 @@ namespace Checkers.Services
         private static bool extraPath = false;
         private static int collectedRedPieces = 0;
         private static int collectedWhitePieces = 0;
+
+        public static GameLogic GameLogicInstance { get; set; }
+
+
         #endregion
+
 
         public static Dictionary<GameSquare, GameSquare> CurrentNeighbours
         {
@@ -196,17 +201,22 @@ namespace Checkers.Services
         }
         #endregion
         #region Serialization
-        public static void LoadGame(ObservableCollection<ObservableCollection<GameSquare>> squares)
+        public static void LoadGame(ObservableCollection<ObservableCollection<GameSquare>> squares, GameLogic gameLogic)
         {
             OpenFileDialog openDialog = new OpenFileDialog();
-            bool? answer = openDialog.ShowDialog();
 
-            if (answer == true)
+            if (openDialog.ShowDialog() == true)
             {
-                string path = openDialog.FileName;
-                using (var reader = new StreamReader(path))
+                using (StreamReader reader = new StreamReader(openDialog.FileName))
                 {
+                    string playerTurn = reader.ReadLine();
+                    gameLogic.Turn = new PlayerTurn(playerTurn == "Red" ? PieceColor.Red : PieceColor.White);
+
                     string text;
+                    gameLogic.RedPiecesRemaining = int.Parse(reader.ReadLine());
+                    gameLogic.WhitePiecesRemaining = int.Parse(reader.ReadLine());
+
+
                     //current
                     if (CurrentSquare != null)
                     {
@@ -321,16 +331,20 @@ namespace Checkers.Services
             }
         }
 
-        public static void SaveGame(ObservableCollection<ObservableCollection<GameSquare>> squares)
+        public static void SaveGame(ObservableCollection<ObservableCollection<GameSquare>> squares, GameLogic gameLogic)
         {
             SaveFileDialog saveDialog = new SaveFileDialog();
-            bool? answer = saveDialog.ShowDialog();
-            if (answer == true)
+            if (saveDialog.ShowDialog() == true)
             {
                 var path = saveDialog.FileName;
                 using (var writer = new StreamWriter(path))
                 {
-                    //current
+                    // Write the current state of the game from the gameLogic instance
+                    writer.WriteLine(gameLogic.RedPiecesRemaining);
+                    writer.WriteLine(gameLogic.WhitePiecesRemaining);
+                    writer.WriteLine(gameLogic.Turn.PlayerColor == PieceColor.Red ? "Red" : "White");
+
+                    // Write the current square if applicable
                     if (CurrentSquare != null)
                     {
                         writer.Write(CurrentSquare.Row.ToString() + CurrentSquare.Column.ToString());
@@ -340,6 +354,8 @@ namespace Checkers.Services
                         writer.Write(NO_PIECE);
                     }
                     writer.WriteLine();
+
+                    // Write flags for extra moves and paths
                     if (ExtraMove)
                     {
                         writer.Write(HAD_COMBO);
@@ -349,26 +365,18 @@ namespace Checkers.Services
                         writer.Write(NO_PIECE);
                     }
                     writer.WriteLine();
+
                     if (ExtraPath)
                     {
-                        writer.Write(ExtraPath);
+                        writer.Write(EXTRA_PATH);
                     }
                     else
                     {
                         writer.Write(NO_PIECE);
                     }
                     writer.WriteLine();
-                    //TO_DO_MULTI_JUMP
-                    if (Turn.PlayerColor.Equals(PieceColor.Red))
-                    {
-                        writer.Write(RED_TURN);
-                    }
-                    else
-                    {
-                        writer.Write(WHITE_TURN);
-                    }
-                    writer.WriteLine();
-                    //board
+
+                    // Write the board state
                     foreach (var line in squares)
                     {
                         foreach (var square in line)
@@ -393,12 +401,11 @@ namespace Checkers.Services
                             {
                                 writer.Write(RED_KING);
                             }
-                            
                         }
                         writer.WriteLine();
                     }
 
-
+                    // Write neighbors
                     foreach (var square in CurrentNeighbours.Keys)
                     {
                         if (CurrentNeighbours[square] == null)
@@ -416,7 +423,18 @@ namespace Checkers.Services
             }
         }
 
-        public static void ResetGame(ObservableCollection<ObservableCollection<GameSquare>> squares)
+        public static void EnsureGameLogicInstance()
+        {
+            if (GameLogicInstance == null)
+            {
+                // Assuming you want to start scores from zero
+                Winner initialWinner = new Winner(0, 0);
+                PlayerTurn initialTurn = new PlayerTurn(PieceColor.Red); // or some logic to decide the starting color
+                GameLogicInstance = new GameLogic(initBoard(), initialTurn, initialWinner);
+            }
+        }
+
+        public static void ResetGame(ObservableCollection<ObservableCollection<GameSquare>> squares, GameLogic gameLogic)
         {
             foreach (var square in CurrentNeighbours.Keys)
             {
@@ -435,9 +453,17 @@ namespace Checkers.Services
             CollectedWhitePieces = 0;
             CollectedRedPieces = 0;
             Turn.PlayerColor = PieceColor.Red;
-            //texture add
+
+            // Reset the game board to its initial state
             ResetGameBoard(squares);
+
+            // Reset the piece counts via GameLogic
+            if (gameLogic != null)
+            {
+                gameLogic.ResetPieceCounts();
+            }
         }
+
         #endregion
 
         #region Credits
