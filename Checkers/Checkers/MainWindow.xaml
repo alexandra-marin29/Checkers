@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Checkers.ViewModels"
         mc:Ignorable="d"
-        Title="CheckerBoardGame" Height="800" Width="1000"
+        Title="CheckerBoardGame" Height="800" Width="900"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         Background="FloralWhite">
     <Window.DataContext>
         <local:GameVM/>
     </Window.DataContext>
     <Grid>
-        <ItemsControl x:Name="Grid" ItemsSource="{Binding Board}" Margin="15,100,15,15" >
+        <ItemsControl x:Name="Grid" ItemsSource="{Binding Board}" Margin="15,100,15,15" Background="FloralWhite" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ItemsControl ItemsSource="{Binding}">
@@ -28,9 +28,7 @@
                                         <Image Source="{Binding GenericSquare.Texture}" Stretch="UniformToFill"/>
                                     </Border>
                                     <Button Command="{Binding ClickPieceCommand}" CommandParameter="{Binding GenericSquare}">
-                                        <Button.Effect>
-                                            <BlurEffect/>
-                                        </Button.Effect>
+
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Image Source="{Binding GenericSquare.Piece.Texture}" Height="70" Width="70"/>
@@ -51,11 +49,15 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Menu Margin="0,0,0,700" DockPanel.Dock="Top">
-            <MenuItem Header="Settings">
-                <MenuItem Header="New" Command="{Binding Interactions.ResetCommand}"/>
+        <Menu Margin="0,0,0,700" DockPanel.Dock="Top" Background="FloralWhite">
+            <MenuItem Header="File">
+                <MenuItem Header="New Game" Command="{Binding Interactions.ResetCommand}"/>
                 <MenuItem Header="Save" Command="{Binding Interactions.SaveCommand}"/>
                 <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
+                <MenuItem Header="Allow Multiple Jump" IsCheckable="True" IsChecked="{Binding Settings.AllowMultipleJump}"/>
+                <!--<MenuItem Header="Statistics" Command="{Binding Interactions.ShowStatisticsCommand}"/>-->
+            </MenuItem>
+            <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding Interactions.AboutCommand}"/>
             </MenuItem>
         </Menu>
@@ -70,17 +72,5 @@
                VerticalAlignment="Top" Width="60" Source="{Binding WHITE_PIECE}"/>
         <Image HorizontalAlignment="Left" Height="60" Margin="704,435,0,0" 
                VerticalAlignment="Top" Width="60" Source="{Binding RED_PIECE}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="592,22,0,0" 
-                   Text="Checker Board Game" 
-                   TextWrapping="Wrap"
-                   FontSize="30"
-                   Foreground="CornflowerBlue"
-                   FontWeight="DemiBold"
-                   VerticalAlignment="Top">
-            <TextBlock.Effect>
-                <BlurEffect/>
-            </TextBlock.Effect>
-        </TextBlock>
-
     </Grid>
 </Window>

@@ -15,13 +15,13 @@ namespace Checkers.Services
     {
         #region constValues
         //const image paths
-        public const string redSquare = "/MVP_Checkers;component/Resources/squareRed.png";
-        public const string whiteSquare = "/MVP_Checkers;component/Resources/squareWhite.png";
-        public const string redPiece = "/MVP_Checkers;component/Resources/pieceRed.png";
-        public const string whitePiece = "/MVP_Checkers;component/Resources/pieceWhite.png";
-        public const string hintSquare = "/MVP_Checkers;component/Resources/squareHint.png";
-        public const string redKingPiece = "/MVP_Checkers;component/Resources/pieceRedKing.png";
-        public const string whiteKingPiece = "/MVP_Checkers;component/Resources/pieceWhiteKing.png";
+        public const string redSquare = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\squareRed.png";
+        public const string whiteSquare = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\squareWhite.png";
+        public const string redPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceRed.png";
+        public const string whitePiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceWhite.png";
+        public const string hintSquare = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\squareHint.png";
+        public const string redKingPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceRedKing.png";
+        public const string whiteKingPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceWhiteKing.png";
         public const string SQUARE_HIGHLIGHT = "NULL";
         //const values for serialization
         public const char NO_PIECE = 'N';
@@ -445,7 +445,7 @@ namespace Checkers.Services
         {
             //string PATH = Path.GetDirectoryName(System.Environment.CurrentDirectory);
             //PATH = Directory.GetParent(PATH).FullName + @"\Resources\about.txt";
-            string PATH = "C:/Users/andre/source/repos/MVP_Checkers/MVP_Checkers/Resources/about.txt";
+            string PATH = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\about.txt";
 
             using (var reader = new StreamReader(PATH))
             {
@@ -457,7 +457,7 @@ namespace Checkers.Services
         #region textFileHandling
         public static void writeScore(int r, int w)
         {
-            string PATH = "C:/Users/andre/source/repos/MVP_Checkers/MVP_Checkers/Resources/winnerText.txt";
+            string PATH = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\winnerText.txt";
             using (var writer = new StreamWriter(PATH))
             {
                 writer.WriteLine(r + "," + w);
@@ -467,7 +467,7 @@ namespace Checkers.Services
         public static Winner getScore()
         {
             Winner aux = new Winner(0, 0);
-            string PATH = "C:/Users/andre/source/repos/MVP_Checkers/MVP_Checkers/Resources/winnerText.txt";
+            string PATH = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\winnerText.txt";
             using (var reader = new StreamReader(PATH))
             {
                 string line = reader.ReadLine();

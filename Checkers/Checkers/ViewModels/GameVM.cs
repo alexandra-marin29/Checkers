@@ -1,6 +1,5 @@
 ﻿using Checkers.Models;
 using Checkers.Services;
-using Checkers.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,7 +25,7 @@ namespace Checkers.ViewModels
         public GameVM()
         {
             ObservableCollection<ObservableCollection<GameSquare>> board = Utility.initBoard();
-            PlayerTurnVM playerTurn = new PlayerTurn(PieceColor.Red);
+            PlayerTurn playerTurn = new PlayerTurn(PieceColor.Red);
             Winner winner = new Winner(0, 0);
             Logic = new GameLogic(board, playerTurn, winner);
             PlayerTurnVM = new PlayerTurnVM(Logic, playerTurn);
