@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Documents;
 
 namespace Checkers.Services
 {
@@ -155,6 +156,12 @@ namespace Checkers.Services
                 Utility.CurrentSquare = null;
             }
         }
+        public void UpdateTurn(PlayerTurn newTurn)
+        {
+            Turn = newTurn;
+            NotifyPropertyChanged(nameof(Turn));  // This notifies the UI that the Turn property has changed.
+        }
+
         #endregion
         #region ClickCommands
 
@@ -179,6 +186,7 @@ namespace Checkers.Services
             {
                 Turn.TurnImage = Utility.whitePiece;
             }
+
         }
 
         public void About()
@@ -271,7 +279,7 @@ namespace Checkers.Services
 
         public void ResetPieceCounts()
         {
-            RedPiecesRemaining = 12; 
+            RedPiecesRemaining = 12;
             WhitePiecesRemaining = 12;
         }
 
@@ -296,7 +304,7 @@ namespace Checkers.Services
 
             Utility.CollectedRedPieces = 0;
             Utility.CollectedWhitePieces = 0;
-            Utility.ResetGame(board,this);
+            Utility.ResetGame(board, this);
         }
         #endregion 
     }

@@ -235,6 +235,7 @@ namespace Checkers.Services
                             return;
                         }
                         PlayerTurn newTurn = new PlayerTurn(turnColor);
+                        gameLogic.UpdateTurn(newTurn);
                         newTurn.TurnImage = turnColor == PieceColor.White ? Utility.whitePiece : Utility.redPiece;
 
                         gameLogic.Turn = newTurn;
@@ -389,18 +390,18 @@ namespace Checkers.Services
                     }
 
                     // Write neighbors
-                    foreach (var square in CurrentNeighbours.Keys)
-                    {
-                        if (CurrentNeighbours[square] == null)
-                        {
-                            writer.Write(square.Row.ToString() + square.Column.ToString() + NO_PIECE);
-                        }
-                        else
-                        {
-                            writer.Write(square.Row.ToString() + square.Column.ToString() + CurrentNeighbours[square].Row.ToString() + CurrentNeighbours[square].Column.ToString());
-                        }
-                        writer.WriteLine();
-                    }
+                    //foreach (var square in CurrentNeighbours.Keys)
+                    //{
+                    //    if (CurrentNeighbours[square] == null)
+                    //    {
+                    //        writer.Write(square.Row.ToString() + square.Column.ToString() + NO_PIECE);
+                    //    }
+                    //    else
+                    //    {
+                    //        writer.Write(square.Row.ToString() + square.Column.ToString() + CurrentNeighbours[square].Row.ToString() + CurrentNeighbours[square].Column.ToString());
+                    //    }
+                    //    writer.WriteLine();
+                    //}
                     writer.Write("-\n");
                 }
             }
