@@ -61,6 +61,10 @@ namespace Checkers.Services
     #region Logics
     private void SwitchTurns(GameSquare square)
         {
+            Turn.PlayerColor = Turn.PlayerColor == PieceColor.Red ? PieceColor.White : PieceColor.Red;
+
+            // This also needs to update any UI bindings or related properties
+            NotifyPropertyChanged(nameof(Turn));
             if (square.Piece.Color == PieceColor.Red)
             {
                 Utility.Turn.PlayerColor = PieceColor.White;
@@ -167,7 +171,14 @@ namespace Checkers.Services
         public void LoadGame()
         {
             Utility.LoadGame(board,this);
-            Turn.TurnImage = Utility.Turn.TurnImage;
+            if (Turn.PlayerColor == PieceColor.Red)
+            {
+                Turn.TurnImage = Utility.whitePiece;
+            }
+            if(Turn.PlayerColor == PieceColor.White)
+            {
+                Turn.TurnImage = Utility.redPiece;
+            }
         }
 
         public void About()

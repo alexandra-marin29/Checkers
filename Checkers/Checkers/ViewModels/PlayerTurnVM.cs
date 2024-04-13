@@ -17,7 +17,7 @@ namespace Checkers.ViewModels
         public PlayerTurnVM(GameLogic gameLogic, PlayerTurn playerTurn)
         {
             this.gameLogic = gameLogic;
-            this.playerTurn = playerTurn;
+            this.playerTurn = gameLogic.Turn;
         }
 
         public PlayerTurn PlayerIcon

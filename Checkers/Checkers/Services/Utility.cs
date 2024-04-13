@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Checkers.Services
 {
@@ -204,132 +205,110 @@ namespace Checkers.Services
         public static void LoadGame(ObservableCollection<ObservableCollection<GameSquare>> squares, GameLogic gameLogic)
         {
             OpenFileDialog openDialog = new OpenFileDialog();
-
             if (openDialog.ShowDialog() == true)
             {
-                using (StreamReader reader = new StreamReader(openDialog.FileName))
+                string path = openDialog.FileName;
+                try
                 {
-                    string playerTurn = reader.ReadLine();
-                    gameLogic.Turn = new PlayerTurn(playerTurn == "Red" ? PieceColor.Red : PieceColor.White);
-
-                    string text;
-                    gameLogic.RedPiecesRemaining = int.Parse(reader.ReadLine());
-                    gameLogic.WhitePiecesRemaining = int.Parse(reader.ReadLine());
-
-
-                    //current
-                    if (CurrentSquare != null)
+                    using (StreamReader reader = new StreamReader(path))
                     {
-                        CurrentSquare.Texture = redSquare;
-                    }
-                    text = reader.ReadLine();
-                    if (text != NO_PIECE.ToString())
-                    {
-                        CurrentSquare = squares[(int)char.GetNumericValue(text[0])][(int)char.GetNumericValue(text[1])];
-                        CurrentSquare.Texture = SQUARE_HIGHLIGHT;
-                    }
-                    else
-                    {
-                        CurrentSquare = null;
-                    }
-
-                    text = reader.ReadLine();
-                    if (text != NO_PIECE.ToString())
-                    {
-                        ExtraMove = true;
-                    }
-                    else
-                    {
-                        ExtraMove = false;
-                    }
-                    text = reader.ReadLine();
-                    if (text != NO_PIECE.ToString())
-                    {
-                        ExtraPath = true;
-                    }
-                    else
-                    {
-                        ExtraPath = false;
-                    }
-                    //to_do_multi_JUMP
-                    text = reader.ReadLine();
-                    if (text == RED_TURN.ToString())
-                    {
-                        Turn.PlayerColor = PieceColor.Red;
-                        Turn.TurnImage = redPiece;
-                    }
-                    else
-                    {
-                        Turn.PlayerColor = PieceColor.White;
-                        Turn.TurnImage = redPiece;
-                    }
-                    //board
-                    for (int index1 = 0; index1 < boardSize; index1++)
-                    {
-                        text = reader.ReadLine();
-                        for (int index2 = 0; index2 < boardSize; index2++)
+                        // Read and set the number of remaining red and white pieces
+                        if (!int.TryParse(reader.ReadLine(), out int redPiecesRemaining))
                         {
-                            squares[index1][index2].LegalSquareSymbol = null;
-                            char pieceType = text[index2];
-
-                            if (pieceType == NO_PIECE)
-                            {
-                                squares[index1][index2].Piece = null;
-                            }
-                            else if (pieceType == RED_PIECE)
-                            {
-                                squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.Regular);
-                                squares[index1][index2].Piece.Square = squares[index1][index2];
-                                //to_DO
-                            }
-                            else if (pieceType == RED_KING)
-                            {
-                                squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.King);
-                                squares[index1][index2].Piece.Square = squares[index1][index2];
-                                //todo
-                            }
-                            else if (pieceType == WHITE_PIECE)
-                            {
-                                squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.Regular);
-                                squares[index1][index2].Piece.Square = squares[index1][index2];
-                            }
-                            else if (pieceType == WHITE_KING)
-                            {
-                                squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.King);
-                                squares[index1][index2].Piece.Square = squares[index1][index2];
-                            }
+                            MessageBox.Show("Error parsing red pieces remaining.");
+                            return;
                         }
-                    }
+                        gameLogic.RedPiecesRemaining = redPiecesRemaining;
 
-                    foreach (var square in CurrentNeighbours.Keys)
-                    {
-                        square.LegalSquareSymbol = null;
-                    }
-
-                    CurrentNeighbours.Clear();
-
-                    do
-                    {
-                        text = reader.ReadLine();
-                        if (text == "-")
+                        if (!int.TryParse(reader.ReadLine(), out int whitePiecesRemaining))
                         {
-                            if (text.Length == 1)
-                            {
-                                break;
-                            }
-                            CurrentNeighbours.Add(squares[(int)char.GetNumericValue(text[0])][(int)char.GetNumericValue(text[1])], null);
+                            MessageBox.Show("Error parsing white pieces remaining.");
+                            return;
+                        }
+                        gameLogic.WhitePiecesRemaining = whitePiecesRemaining;
+
+                        // Read and set the current player's turn
+                        string playerTurn = reader.ReadLine();
+                        if (!Enum.TryParse(playerTurn, true, out PieceColor turnColor))
+                        {
+                            MessageBox.Show("Error parsing player turn.");
+                            return;
+                        }
+                        gameLogic.Turn = new PlayerTurn(turnColor);
+
+                        string text = reader.ReadLine();
+                        if (text != NO_PIECE.ToString())
+                        {
+                            ExtraMove = true;
                         }
                         else
                         {
-                            CurrentNeighbours.Add(squares[(int)char.GetNumericValue(text[0])][(int)char.GetNumericValue(text[1])],
-                                squares[(int)char.GetNumericValue(text[2])][(int)char.GetNumericValue(text[3])]);
-                            //TO-DO
+                            ExtraMove = false;
                         }
-                    } while (text != "-");
+                        text = reader.ReadLine();
+                        if (text != NO_PIECE.ToString())
+                        {
+                            ExtraPath = true;
+                        }
+                        else
+                        {
+                            ExtraPath = false;
+                        }
+                        // Read the board state
+                        for (int i = 0; i < boardSize; i++)
+                        {
+                            string line = reader.ReadLine();
+                            if (line == null || line.Length != boardSize)
+                            {
+                                MessageBox.Show($"Board line {i + 1} is corrupt or not in the expected format.");
+                                return;
+                            }
 
+                            for (int j = 0; j < boardSize; j++)
+                            {
+                                char pieceType = line[j];
+                                if (pieceType != NO_PIECE)
+                                {
+                                    GamePiece piece = ParsePieceType(pieceType, i, j);
+                                    squares[i][j].Piece = piece;
+                                }
+                                // If the pieceType is NO_PIECE, set the square's piece to null
+                                else
+                                {
+                                    squares[i][j].Piece = null;
+                                }
+                            }
+                        }
+
+                        // Check for the end-of-data marker
+                        if (reader.ReadLine() != "-")
+                        {
+                            MessageBox.Show("End of data marker '-' not found.");
+                            return;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Exception encountered during file load: {ex.Message}", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
+
+        private static GamePiece ParsePieceType(char pieceType, int row, int col)
+        {
+            switch (pieceType)
+            {
+                case NO_PIECE: return null;
+                case RED_PIECE: return new GamePiece(PieceColor.Red, PieceType.Regular);
+                case WHITE_PIECE: return new GamePiece(PieceColor.White, PieceType.Regular);
+                case RED_KING: return new GamePiece(PieceColor.Red, PieceType.King);
+                case WHITE_KING: return new GamePiece(PieceColor.White, PieceType.King);
+                default: throw new FormatException($"Unknown piece type '{pieceType}' at row {row}, column {col}");
+            }
+        }
+
 
         public static void SaveGame(ObservableCollection<ObservableCollection<GameSquare>> squares, GameLogic gameLogic)
         {
@@ -345,15 +324,15 @@ namespace Checkers.Services
                     writer.WriteLine(gameLogic.Turn.PlayerColor == PieceColor.Red ? "Red" : "White");
 
                     // Write the current square if applicable
-                    if (CurrentSquare != null)
-                    {
-                        writer.Write(CurrentSquare.Row.ToString() + CurrentSquare.Column.ToString());
-                    }
-                    else
-                    {
-                        writer.Write(NO_PIECE);
-                    }
-                    writer.WriteLine();
+                    //if (CurrentSquare != null)
+                    //{
+                    //    writer.Write(CurrentSquare.Row.ToString() + CurrentSquare.Column.ToString());
+                    //}
+                    //else
+                    //{
+                    //    writer.Write(NO_PIECE);
+                    //}
+                    //writer.WriteLine();
 
                     // Write flags for extra moves and paths
                     if (ExtraMove)
