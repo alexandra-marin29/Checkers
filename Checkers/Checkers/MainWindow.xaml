@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Checkers.ViewModels"
+        xmlns:converter="clr-namespace:Checkers.Converters"
+
         mc:Ignorable="d"
         Title="CheckerBoardGame" Height="800" Width="900"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
@@ -11,6 +13,10 @@
     <Window.DataContext>
         <local:GameVM/>
     </Window.DataContext>
+    <Window.Resources>
+        <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\FACULTATE_AN_2\MVP\CheckersGame_Tema2\Checkers\Checkers\Resources\default.png"/>
+    </Window.Resources>
+
     <Grid>
         <ItemsControl x:Name="Grid" ItemsSource="{Binding Board}" Margin="15,100,15,15" Background="FloralWhite" >
             <ItemsControl.ItemTemplate>
@@ -25,20 +31,20 @@
                             <DataTemplate>
                                 <Grid>
                                     <Border Width="75" Height="75" BorderThickness="1" BorderBrush="#000000">
-                                        <Image Source="{Binding GenericSquare.Texture}" Stretch="UniformToFill"/>
+                                        <Image Source="{Binding GenericSquare.Texture, Converter={StaticResource NullImageConverter}}" Stretch="UniformToFill"/>
                                     </Border>
                                     <Button Command="{Binding ClickPieceCommand}" CommandParameter="{Binding GenericSquare}">
 
                                         <Button.Template>
                                             <ControlTemplate>
-                                                <Image Source="{Binding GenericSquare.Piece.Texture}" Height="70" Width="70"/>
+                                                <Image Source="{Binding GenericSquare.Piece.Texture, Converter={StaticResource NullImageConverter}}" Height="70" Width="70"/>
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
                                     <Button Command="{Binding MovePieceCommand}" CommandParameter="{Binding GenericSquare}">
                                         <Button.Template>
                                             <ControlTemplate>
-                                                <Image Source="{Binding GenericSquare.LegalSquareSymbol}" Height="20" Width="20"/>
+                                                <Image Source="{Binding GenericSquare.LegalSquareSymbol, Converter={StaticResource NullImageConverter}}" Height="20" Width="20"/>
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
@@ -62,10 +68,10 @@
             </MenuItem>
         </Menu>
         <TextBlock HorizontalAlignment="Left" Margin="616,280,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" Text="Turn" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="616,356,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" 
-                   Text="{Binding WinnerVM.WinnerPlayer.WhiteWins}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="616,435,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" 
-                   Text="{Binding WinnerVM.WinnerPlayer.RedWins}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="616,356,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
+           Text="{Binding Logic.WhitePiecesRemaining}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="616,435,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
+           Text="{Binding Logic.RedPiecesRemaining}" VerticalAlignment="Top"/>
         <Image HorizontalAlignment="Left" Height="60" Margin="704,270,0,0" 
                VerticalAlignment="Top" Width="60" Source="{Binding PlayerTurnVM.PlayerIcon.TurnImage}"/>
         <Image HorizontalAlignment="Left" Height="60" Margin="704,356,0,0" 

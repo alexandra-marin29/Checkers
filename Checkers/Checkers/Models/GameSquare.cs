@@ -1,16 +1,12 @@
 ﻿using Checkers.Models;
 using Checkers.Services;
+using Checkers.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace Checkers.Models
 {
-    public class GameSquare : INotifyPropertyChanged
+    public class GameSquare : BaseNotification
     {
         private int row;
         private int column;
@@ -18,8 +14,6 @@ namespace Checkers.Models
         private string texture;
         private GamePiece piece;
         private string legalSquareSymbol;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public GameSquare(int row, int column, SquareShade shade, GamePiece piece)
         {
@@ -37,75 +31,26 @@ namespace Checkers.Models
             this.piece = piece;
         }
 
-        public int Row
-        {
-            get
-            {
-                return row;
-            }
-        }
-
-        public int Column
-        {
-            get
-            {
-                return column;
-            }
-        }
-
-        public SquareShade Shade
-        {
-            get
-            {
-                return shade;
-            }
-        }
+        public int Row => row;
+        public int Column => column;
+        public SquareShade Shade => shade;
 
         public string Texture
         {
-            get
-            {
-                return texture;
-            }
-            set
-            {
-                texture = value;
-                NotifyPropertyChanged("Texture");
-            }
+            get => texture;
+            set => SetProperty(ref texture, value);
         }
 
         public GamePiece Piece
         {
-            get
-            {
-                return piece;
-            }
-            set
-            {
-                piece = value;
-                NotifyPropertyChanged("Piece");
-            }
+            get => piece;
+            set => SetProperty(ref piece, value);
         }
 
         public string LegalSquareSymbol
         {
-            get
-            {
-                return legalSquareSymbol;
-            }
-            set
-            {
-                legalSquareSymbol = value;
-                NotifyPropertyChanged("LegalSquareSymbol");
-            }
-        }
-
-        protected void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            get => legalSquareSymbol;
+            set => SetProperty(ref legalSquareSymbol, value);
         }
     }
 }

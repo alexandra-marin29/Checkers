@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\NullImageConverter.cs" />
     <Compile Include="Services\GameLogic.cs" />
     <Compile Include="Services\Utility.cs" />
     <Compile Include="ViewModels\BaseNotification.cs" />

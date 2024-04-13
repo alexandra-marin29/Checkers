@@ -20,6 +20,9 @@ namespace Checkers.ViewModels
 
         public ICommand ShowStatisticsCommand { get; private set; }
 
+        public int WhitePiecesRemaining => Logic.WhitePiecesRemaining;
+        public int RedPiecesRemaining => Logic.RedPiecesRemaining;
+
 
         public WinnerVM WinnerVM { get; set; }
 

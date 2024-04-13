@@ -33,7 +33,7 @@ namespace Checkers.ViewModels
             set
             {
                 genericSquare = value;
-                NotifyPropertyChanged("GenericSquare");
+                OnPropertyChanged("GenericSquare");
             }
         }
 

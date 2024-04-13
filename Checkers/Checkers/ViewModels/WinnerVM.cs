@@ -26,7 +26,7 @@ namespace Checkers.ViewModels
             set
             {
                 winner = value;
-                NotifyPropertyChanged("WinnerPlayer");
+                OnPropertyChanged("WinnerPlayer");
             }
         }
     }

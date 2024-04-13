@@ -27,7 +27,7 @@ namespace Checkers.Models
             set
             {
                 redWins = value;
-                NotifyPropertyChanged("RedWins");
+                OnPropertyChanged("RedWins");
             }
         }
 
@@ -40,7 +40,7 @@ namespace Checkers.Models
             set
             {
                 whiteWins = value;
-                NotifyPropertyChanged("WhiteWins");
+                OnPropertyChanged("WhiteWins");
             }
         }
     }

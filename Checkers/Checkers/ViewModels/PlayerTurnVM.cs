@@ -29,7 +29,7 @@ namespace Checkers.ViewModels
             set
             {
                 playerTurn = value;
-                NotifyPropertyChanged("PlayerIcon");
+                OnPropertyChanged("PlayerIcon");
             }
         }
     }

@@ -36,7 +36,7 @@ namespace Checkers.Models
             set
             {
                 color = value;
-                NotifyPropertyChanged("PlayerColor");
+               OnPropertyChanged("PlayerColor");
             }
         }
 
@@ -49,7 +49,7 @@ namespace Checkers.Models
             set
             {
                 image = value;
-                NotifyPropertyChanged("TurnImage");
+                OnPropertyChanged("TurnImage");
             }
         }
     }

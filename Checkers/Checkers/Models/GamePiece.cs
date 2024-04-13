@@ -1,110 +1,58 @@
 ﻿using Checkers.Services;
-using System;
-using System.Collections.Generic;
+using Checkers.ViewModels;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Checkers.Models
 {
-    public class GamePiece : INotifyPropertyChanged
+    public class GamePiece : BaseNotification
     {
         private PieceColor color;
         private PieceType type;
         private string texture;
         private GameSquare square;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public GamePiece(PieceColor color)
-        {
-            this.color = color;
-            type = PieceType.Regular;
-            if (color == PieceColor.Red)
-            {
-                texture = Utility.redPiece;
-            }
-            else
-            {
-                texture = Utility.whitePiece;
-            }
-        }
-
-        public GamePiece(PieceColor color, PieceType type)
+        public GamePiece(PieceColor color, PieceType type = PieceType.Regular)
         {
             this.color = color;
             this.type = type;
-            if (color == PieceColor.Red)
-            {
-                texture = Utility.redPiece;
-            }
-            else
-            {
-                texture = Utility.whitePiece;
-            }
-            if (type == PieceType.King && color == PieceColor.Red)
-            {
-                texture = Utility.redKingPiece;
-            }
-            if (type == PieceType.King && color == PieceColor.White)
-            {
-                texture = Utility.whiteKingPiece;
-            }
+            UpdateTexture();
         }
 
-        public PieceColor Color
-        {
-            get
-            {
-                return color;
-            }
-        }
+        public PieceColor Color => color;
 
         public PieceType Type
         {
-            get
-            {
-                return type;
-            }
+            get => type;
             set
             {
-                type = value;
-                NotifyPropertyChanged("Type");
+                if (SetProperty(ref type, value))
+                {
+                    UpdateTexture();
+                }
             }
         }
 
         public string Texture
         {
-            get
-            {
-                return texture;
-            }
-            set
-            {
-                texture = value;
-                NotifyPropertyChanged("Texture");
-            }
+            get => texture;
+            set => SetProperty(ref texture, value);
         }
 
         public GameSquare Square
         {
-            get
-            {
-                return square;
-            }
-            set
-            {
-                square = value;
-                NotifyPropertyChanged("Square");
-            }
+            get => square;
+            set => SetProperty(ref square, value);
         }
 
-        protected void NotifyPropertyChanged(string propertyName)
+        private void UpdateTexture()
         {
-            if (PropertyChanged != null)
+            if (color == PieceColor.Red)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                Texture = type == PieceType.King ? Utility.redKingPiece : Utility.redPiece;
+            }
+            else
+            {
+                Texture = type == PieceType.King ? Utility.whiteKingPiece : Utility.whitePiece;
             }
         }
     }

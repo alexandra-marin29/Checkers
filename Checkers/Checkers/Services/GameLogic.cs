@@ -7,14 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Checkers.Services
 {
-    public class GameLogic
+    public class GameLogic: INotifyPropertyChanged
     {
         private ObservableCollection<ObservableCollection<GameSquare>> board;
         private PlayerTurn playerTurn;
         private Winner winner;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private int _whitePiecesRemaining;
+        private int _redPiecesRemaining;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        public int WhitePiecesRemaining
+        {
+            get => _whitePiecesRemaining;
+            private set
+            {
+                _whitePiecesRemaining = value;
+                NotifyPropertyChanged(nameof(WhitePiecesRemaining));
+            }
+        }
+
+        public int RedPiecesRemaining
+        {
+            get => _redPiecesRemaining;
+            private set
+            {
+                _redPiecesRemaining = value;
+                NotifyPropertyChanged(nameof(RedPiecesRemaining));
+            }
+        }
+
         public GameLogic(ObservableCollection<ObservableCollection<GameSquare>> board, PlayerTurn playerTurn, Winner winner)
         {
             this.board = board;
@@ -22,6 +54,8 @@ namespace Checkers.Services
             this.winner = winner;
             this.winner.RedWins = Utility.getScore().RedWins;
             this.winner.WhiteWins = Utility.getScore().WhiteWins;
+            WhitePiecesRemaining = 12;
+            RedPiecesRemaining = 12;
         }
         #region Logics
         private void SwitchTurns(GameSquare square)
@@ -154,9 +188,18 @@ namespace Checkers.Services
             square.Piece = Utility.CurrentSquare.Piece;
             square.Piece.Square = square;
 
+            foreach (var pair in Utility.CurrentNeighbours)
+            {
+                Console.WriteLine($"Neighbour Position: [{pair.Key.Row}, {pair.Key.Column}] - Has Neighbour: {pair.Value != null}");
+            }
+
             if (Utility.CurrentNeighbours[square] != null)
             {
                 Utility.CurrentNeighbours[square].Piece = null;
+                if (square.Piece.Color == PieceColor.Red)
+                    WhitePiecesRemaining--; 
+                else
+                    RedPiecesRemaining--;
                 Utility.ExtraMove = true;
             }
             else
