@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Checkers.Models
 {
-    internal class PieceType
+    public enum PieceType
     {
+        Regular,
+        King
     }
 }

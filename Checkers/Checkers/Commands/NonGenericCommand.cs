@@ -7,31 +7,30 @@ using System.Windows.Input;
 
 namespace Checkers.Commands
 {
-    public class RelayCommand<T> : ICommand
+    class NonGenericCommand : ICommand
     {
-        private Action<T> commandTask;
-        private Predicate<T> canExecuteTask;
 
-        public RelayCommand(Action<T> workToDo, Predicate<T> canExecute)
+        private Action commandTask;
+        private Predicate<object> canExecuteTask;
+
+        public NonGenericCommand(Action toDo) : this(toDo, DefaultCanExecute)
         {
-            commandTask = workToDo;
+            commandTask = toDo;
+        }
+
+        public NonGenericCommand(Action toDo, Predicate<object> canExecute)
+        {
+            commandTask = toDo;
             canExecuteTask = canExecute;
         }
 
-        public RelayCommand(Action<T> workToDo)
-            : this(workToDo, DefaultCanExecute)
-        {
-            commandTask = workToDo;
-        }
-
-        private static bool DefaultCanExecute(T parameter)
+        private static bool DefaultCanExecute(object parameter)
         {
             return true;
         }
-
         public bool CanExecute(object parameter)
         {
-            return canExecuteTask != null && canExecuteTask((T)parameter);
+            return canExecuteTask != null && canExecuteTask(parameter);
         }
 
         public event EventHandler CanExecuteChanged
@@ -49,7 +48,7 @@ namespace Checkers.Commands
 
         public void Execute(object parameter)
         {
-            commandTask((T)parameter);
+            commandTask();
         }
     }
 }

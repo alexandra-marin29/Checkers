@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Checkers.Models
 {
-    internal class SquareShade
+    public enum SquareShade
     {
+        Dark,
+        Light
     }
 }

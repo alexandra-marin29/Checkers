@@ -3,10 +3,84 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Checkers"
+        xmlns:local="clr-namespace:Checkers.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="CheckerBoardGame" Height="800" Width="1000"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="FloralWhite">
+    <Window.DataContext>
+        <local:GameVM/>
+    </Window.DataContext>
     <Grid>
-        
+        <ItemsControl x:Name="Grid" ItemsSource="{Binding Board}" Margin="15,100,15,15" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Border Width="75" Height="75" BorderThickness="1" BorderBrush="#000000">
+                                        <Image Source="{Binding GenericSquare.Texture}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <Button Command="{Binding ClickPieceCommand}" CommandParameter="{Binding GenericSquare}">
+                                        <Button.Effect>
+                                            <BlurEffect/>
+                                        </Button.Effect>
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="{Binding GenericSquare.Piece.Texture}" Height="70" Width="70"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                    <Button Command="{Binding MovePieceCommand}" CommandParameter="{Binding GenericSquare}">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="{Binding GenericSquare.LegalSquareSymbol}" Height="20" Width="20"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Menu Margin="0,0,0,700" DockPanel.Dock="Top">
+            <MenuItem Header="Settings">
+                <MenuItem Header="New" Command="{Binding Interactions.ResetCommand}"/>
+                <MenuItem Header="Save" Command="{Binding Interactions.SaveCommand}"/>
+                <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
+                <MenuItem Header="About" Command="{Binding Interactions.AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+        <TextBlock HorizontalAlignment="Left" Margin="616,280,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" Text="Turn" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="616,356,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" 
+                   Text="{Binding WinnerVM.WinnerPlayer.WhiteWins}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="616,435,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" 
+                   Text="{Binding WinnerVM.WinnerPlayer.RedWins}" VerticalAlignment="Top"/>
+        <Image HorizontalAlignment="Left" Height="60" Margin="704,270,0,0" 
+               VerticalAlignment="Top" Width="60" Source="{Binding PlayerTurnVM.PlayerIcon.TurnImage}"/>
+        <Image HorizontalAlignment="Left" Height="60" Margin="704,356,0,0" 
+               VerticalAlignment="Top" Width="60" Source="{Binding WHITE_PIECE}"/>
+        <Image HorizontalAlignment="Left" Height="60" Margin="704,435,0,0" 
+               VerticalAlignment="Top" Width="60" Source="{Binding RED_PIECE}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="592,22,0,0" 
+                   Text="Checker Board Game" 
+                   TextWrapping="Wrap"
+                   FontSize="30"
+                   Foreground="CornflowerBlue"
+                   FontWeight="DemiBold"
+                   VerticalAlignment="Top">
+            <TextBlock.Effect>
+                <BlurEffect/>
+            </TextBlock.Effect>
+        </TextBlock>
+
     </Grid>
 </Window>

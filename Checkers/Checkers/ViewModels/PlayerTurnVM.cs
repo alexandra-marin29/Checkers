@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Checkers.Models;
+using Checkers.Services;
+using Checkers.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +9,28 @@ using System.Threading.Tasks;
 
 namespace Checkers.ViewModels
 {
-    internal class PlayerTurnVM
+    public class PlayerTurnVM : BaseNotification
     {
+        private GameLogic gameLogic;
+        private PlayerTurn playerTurn;
+
+        public PlayerTurnVM(GameLogic gameLogic, PlayerTurn playerTurn)
+        {
+            this.gameLogic = gameLogic;
+            this.playerTurn = playerTurn;
+        }
+
+        public PlayerTurn PlayerIcon
+        {
+            get
+            {
+                return playerTurn;
+            }
+            set
+            {
+                playerTurn = value;
+                NotifyPropertyChanged("PlayerIcon");
+            }
+        }
     }
 }

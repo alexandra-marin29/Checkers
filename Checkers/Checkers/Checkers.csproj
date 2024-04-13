@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C9F839B5-1953-49DF-AA7C-01AFE0D40DC0}</ProjectGuid>
+    <ProjectGuid>{B8E2194E-F675-4991-ACAC-86F6276DD41C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Checkers</RootNamespace>
     <AssemblyName>Checkers</AssemblyName>
@@ -55,6 +55,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\GameLogic.cs" />
+    <Compile Include="Services\Utility.cs" />
+    <Compile Include="ViewModels\BaseNotification.cs" />
+    <Compile Include="ViewModels\ButtonInteractionVM.cs" />
+    <Compile Include="ViewModels\GameSquareVM.cs" />
+    <Compile Include="ViewModels\GameVM.cs" />
+    <Compile Include="ViewModels\PlayerTurnVM.cs" />
+    <Compile Include="ViewModels\WinnerVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,12 +71,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\NonGenericCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\GamePiece.cs" />
+    <Compile Include="Models\GameSquare.cs" />
+    <Compile Include="Models\PieceColor.cs" />
+    <Compile Include="Models\PieceType.cs" />
+    <Compile Include="Models\PlayerTurn.cs" />
+    <Compile Include="Models\SquareShade.cs" />
+    <Compile Include="Models\Winner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
