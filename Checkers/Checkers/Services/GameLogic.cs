@@ -286,26 +286,33 @@ namespace Checkers.Services
 
         public void GameOver()
         {
-            Winner aux = Utility.getScore();
+            Winner stats = Utility.getScore(); // Get current scores and max pieces left
             if (Utility.CollectedRedPieces == 12)
             {
-                Utility.writeScore(aux.RedWins, ++aux.WhiteWins);
+                stats.WhiteWins++; // White wins
+                int piecesLeft = WhitePiecesRemaining; // Number of pieces left for white
+                if (piecesLeft > stats.MaxWhitePiecesLeft)
+                {
+                    stats.MaxWhitePiecesLeft = piecesLeft;
+                }
+                MessageBox.Show("Game Over! The Winner is Player White!");
             }
-            if (Utility.CollectedWhitePieces == 12)
+            else if (Utility.CollectedWhitePieces == 12)
             {
-                Utility.writeScore(++aux.RedWins, aux.WhiteWins);
+                stats.RedWins++; // Red wins
+                int piecesLeft = RedPiecesRemaining; // Number of pieces left for red
+                if (piecesLeft > stats.MaxRedPiecesLeft)
+                {
+                    stats.MaxRedPiecesLeft = piecesLeft;
+                }
+                MessageBox.Show("Game Over! The Winner is Player Red!");
             }
-            winner.RedWins = aux.RedWins;
-            winner.WhiteWins = aux.WhiteWins;
-            if (Utility.CollectedRedPieces == 12)
-                MessageBox.Show("Game Over! The Winner is Player White! ");
-            if (Utility.CollectedWhitePieces == 12)
-                MessageBox.Show("Game Over! The Winner is Player Red! ");
 
-            Utility.CollectedRedPieces = 0;
-            Utility.CollectedWhitePieces = 0;
+            Utility.writeScore(stats); // Update scores
             Utility.ResetGame(board, this);
         }
+
+
         #endregion 
     }
 }

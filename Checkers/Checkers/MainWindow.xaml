@@ -67,16 +67,16 @@
                 <MenuItem Header="About" Command="{Binding Interactions.AboutCommand}"/>
             </MenuItem>
         </Menu>
-        <TextBlock HorizontalAlignment="Left" Margin="616,280,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" Text="Turn" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="616,356,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
+        <TextBlock HorizontalAlignment="Left" Margin="650,280,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30" Text="Turn" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="650,360,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
            Text="{Binding Logic.WhitePiecesRemaining}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="616,435,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
+        <TextBlock HorizontalAlignment="Left" Margin="650,440,0,0" TextWrapping="Wrap" FontFamily="Garamond" FontSize="30"
            Text="{Binding Logic.RedPiecesRemaining}" VerticalAlignment="Top"/>
-        <Image HorizontalAlignment="Left" Height="60" Margin="704,270,0,0" 
+        <Image HorizontalAlignment="Left" Height="60" Margin="740,270,0,0" 
                VerticalAlignment="Top" Width="60" Source="{Binding Logic.Turn.TurnImage}"/>
-        <Image HorizontalAlignment="Left" Height="60" Margin="704,356,0,0" 
+        <Image HorizontalAlignment="Left" Height="60" Margin="736,348,0,0" 
                VerticalAlignment="Top" Width="60" Source="{Binding WHITE_PIECE}"/>
-        <Image HorizontalAlignment="Left" Height="60" Margin="704,435,0,0" 
+        <Image HorizontalAlignment="Left" Height="60" Margin="740,425,0,0" 
                VerticalAlignment="Top" Width="60" Source="{Binding RED_PIECE}"/>
     </Grid>
 </Window>

@@ -11,7 +11,8 @@ namespace Checkers.Models
     {
         private int redWins;
         private int whiteWins;
-
+        private int maxRedPiecesLeft; 
+        private int maxWhitePiecesLeft;
         public Winner(int redWins, int whiteWins)
         {
             this.redWins = redWins;
@@ -42,6 +43,17 @@ namespace Checkers.Models
                 whiteWins = value;
                 OnPropertyChanged("WhiteWins");
             }
+        }
+        public int MaxRedPiecesLeft
+        {
+            get => maxRedPiecesLeft;
+            set => SetProperty(ref maxRedPiecesLeft, value);
+        }
+
+        public int MaxWhitePiecesLeft
+        {
+            get => maxWhitePiecesLeft;
+            set => SetProperty(ref maxWhitePiecesLeft, value);
         }
     }
 }

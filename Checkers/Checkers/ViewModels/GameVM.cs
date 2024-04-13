@@ -66,20 +66,14 @@ namespace Checkers.ViewModels
 
         private void ShowStatistics()
         {
-            // Calculate or retrieve statistics
             Winner stats = Utility.getScore();
-            int maxPiecesRemaining = CalculateMaxPiecesRemaining(); // Implement this method based on your logic
-
             string message = $"Total White Wins: {stats.WhiteWins}\n" +
                              $"Total Red Wins: {stats.RedWins}\n" +
-                             $"Max Pieces Remaining on Board at Game End: {maxPiecesRemaining}";
+                             $"Max Red Pieces Remaining at End: {stats.MaxRedPiecesLeft}\n" +
+                             $"Max White Pieces Remaining at End: {stats.MaxWhitePiecesLeft}";
             MessageBox.Show(message, "Game Statistics");
-        }
-        private int CalculateMaxPiecesRemaining()
-        {
-            // Dummy implementation, replace with your actual logic to calculate the max pieces remaining
-            return 5; // Placeholder
-        }
 
+        }
+        
     }
 }

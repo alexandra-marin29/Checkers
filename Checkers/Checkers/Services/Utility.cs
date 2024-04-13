@@ -465,14 +465,15 @@ namespace Checkers.Services
         #endregion
 
         #region textFileHandling
-        public static void writeScore(int r, int w)
+        public static void writeScore(Winner winner)
         {
             string PATH = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\winnerText.txt";
             using (var writer = new StreamWriter(PATH))
             {
-                writer.WriteLine(r + "," + w);
+                writer.WriteLine($"{winner.RedWins},{winner.WhiteWins},{winner.MaxRedPiecesLeft},{winner.MaxWhitePiecesLeft}");
             }
         }
+
 
         public static Winner getScore()
         {
@@ -481,9 +482,11 @@ namespace Checkers.Services
             using (var reader = new StreamReader(PATH))
             {
                 string line = reader.ReadLine();
-                var splitted = line.Split(',');
-                aux.RedWins = int.Parse(splitted[0]);
-                aux.WhiteWins = int.Parse(splitted[1]);
+                var parts = line.Split(',');
+                aux.RedWins = int.Parse(parts[0]);
+                aux.WhiteWins = int.Parse(parts[1]);
+                aux.MaxRedPiecesLeft = int.Parse(parts[2]);
+                aux.MaxWhitePiecesLeft = int.Parse(parts[3]);
             }
             return aux;
         }
