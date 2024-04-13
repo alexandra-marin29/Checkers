@@ -1,4 +1,5 @@
-﻿using Checkers.Models;
+﻿using Checkers.Commands;
+using Checkers.Models;
 using Checkers.Services;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Checkers.ViewModels
 {
@@ -14,6 +17,9 @@ namespace Checkers.ViewModels
         public ObservableCollection<ObservableCollection<GameSquareVM>> Board { get; set; }
         public GameLogic Logic { get; set; }
         public ButtonInteractionVM Interactions { get; set; }
+
+        public ICommand ShowStatisticsCommand { get; private set; }
+
 
         public WinnerVM WinnerVM { get; set; }
 
@@ -24,6 +30,7 @@ namespace Checkers.ViewModels
 
         public GameVM()
         {
+            ShowStatisticsCommand = new RelayCommand<object>(_ => ShowStatistics());
             ObservableCollection<ObservableCollection<GameSquare>> board = Utility.initBoard();
             PlayerTurn playerTurn = new PlayerTurn(PieceColor.Red);
             Winner winner = new Winner(0, 0);
@@ -53,5 +60,23 @@ namespace Checkers.ViewModels
             }
             return result;
         }
+
+        private void ShowStatistics()
+        {
+            // Calculate or retrieve statistics
+            Winner stats = Utility.getScore();
+            int maxPiecesRemaining = CalculateMaxPiecesRemaining(); // Implement this method based on your logic
+
+            string message = $"Total White Wins: {stats.WhiteWins}\n" +
+                             $"Total Red Wins: {stats.RedWins}\n" +
+                             $"Max Pieces Remaining on Board at Game End: {maxPiecesRemaining}";
+            MessageBox.Show(message, "Game Statistics");
+        }
+        private int CalculateMaxPiecesRemaining()
+        {
+            // Dummy implementation, replace with your actual logic to calculate the max pieces remaining
+            return 5; // Placeholder
+        }
+
     }
 }

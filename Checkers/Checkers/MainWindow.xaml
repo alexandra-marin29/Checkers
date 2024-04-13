@@ -55,7 +55,7 @@
                 <MenuItem Header="Save" Command="{Binding Interactions.SaveCommand}"/>
                 <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
                 <MenuItem Header="Allow Multiple Jump" IsCheckable="True" IsChecked="{Binding Settings.AllowMultipleJump}"/>
-                <!--<MenuItem Header="Statistics" Command="{Binding Interactions.ShowStatisticsCommand}"/>-->
+                <MenuItem Header="Statistics" Command="{Binding ShowStatisticsCommand}"/>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding Interactions.AboutCommand}"/>
