@@ -260,30 +260,33 @@ namespace Checkers.Services
                         for (int index2 = 0; index2 < boardSize; index2++)
                         {
                             squares[index1][index2].LegalSquareSymbol = null;
-                            switch (text[index2])
-                            {
-                                case { } when text[index2] == NO_PIECE:
-                                    squares[index1][index2].Piece = null;
-                                    break;
-                                case { } when text[index2] == RED_PIECE:
-                                    squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.Regular);
-                                    squares[index1][index2].Piece.Square = squares[index1][index2];
-                                    //to_DO
-                                    break;
-                                case { } when text[index2] == RED_KING:
-                                    squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.King);
-                                    squares[index1][index2].Piece.Square = squares[index1][index2];
+                            char pieceType = text[index2];
 
-                                    //todo
-                                    break;
-                                case { } when text[index2] == WHITE_PIECE:
-                                    squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.Regular);
-                                    squares[index1][index2].Piece.Square = squares[index1][index2];
-                                    break;
-                                case { } when text[index2] == WHITE_KING:
-                                    squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.King);
-                                    squares[index1][index2].Piece.Square = squares[index1][index2];
-                                    break;
+                            if (pieceType == NO_PIECE)
+                            {
+                                squares[index1][index2].Piece = null;
+                            }
+                            else if (pieceType == RED_PIECE)
+                            {
+                                squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.Regular);
+                                squares[index1][index2].Piece.Square = squares[index1][index2];
+                                //to_DO
+                            }
+                            else if (pieceType == RED_KING)
+                            {
+                                squares[index1][index2].Piece = new GamePiece(PieceColor.Red, PieceType.King);
+                                squares[index1][index2].Piece.Square = squares[index1][index2];
+                                //todo
+                            }
+                            else if (pieceType == WHITE_PIECE)
+                            {
+                                squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.Regular);
+                                squares[index1][index2].Piece.Square = squares[index1][index2];
+                            }
+                            else if (pieceType == WHITE_KING)
+                            {
+                                squares[index1][index2].Piece = new GamePiece(PieceColor.White, PieceType.King);
+                                squares[index1][index2].Piece.Square = squares[index1][index2];
                             }
                         }
                     }
@@ -370,30 +373,31 @@ namespace Checkers.Services
                     {
                         foreach (var square in line)
                         {
-                            switch (square)
+                            if (square.Piece == null)
                             {
-                                case { } when square.Piece == null:
-                                    writer.Write(NO_PIECE);
-                                    break;
-                                case { } when square.Piece.Color.Equals(PieceColor.Red) && square.Piece.Type == PieceType.Regular:
-                                    writer.Write(RED_PIECE);
-                                    break;
-                                case { } when square.Piece.Color.Equals(PieceColor.White) && square.Piece.Type == PieceType.Regular:
-                                    writer.Write(WHITE_PIECE);
-                                    break;
-                                case { } when square.Piece.Color.Equals(PieceColor.White) && square.Piece.Type == PieceType.King:
-                                    writer.Write(WHITE_KING);
-                                    break;
-                                case { } when square.Piece.Color.Equals(PieceColor.Red) && square.Piece.Type == PieceType.King:
-                                    writer.Write(RED_KING);
-                                    break;
-                                default:
-                                    break;
+                                writer.Write(NO_PIECE);
                             }
+                            else if (square.Piece.Color.Equals(PieceColor.Red) && square.Piece.Type == PieceType.Regular)
+                            {
+                                writer.Write(RED_PIECE);
+                            }
+                            else if (square.Piece.Color.Equals(PieceColor.White) && square.Piece.Type == PieceType.Regular)
+                            {
+                                writer.Write(WHITE_PIECE);
+                            }
+                            else if (square.Piece.Color.Equals(PieceColor.White) && square.Piece.Type == PieceType.King)
+                            {
+                                writer.Write(WHITE_KING);
+                            }
+                            else if (square.Piece.Color.Equals(PieceColor.Red) && square.Piece.Type == PieceType.King)
+                            {
+                                writer.Write(RED_KING);
+                            }
+                            
                         }
                         writer.WriteLine();
-
                     }
+
 
                     foreach (var square in CurrentNeighbours.Keys)
                     {
@@ -467,7 +471,7 @@ namespace Checkers.Services
             using (var reader = new StreamReader(PATH))
             {
                 string line = reader.ReadLine();
-                var splitted = line.Split(",");
+                var splitted = line.Split(',');
                 aux.RedWins = int.Parse(splitted[0]);
                 aux.WhiteWins = int.Parse(splitted[1]);
             }
