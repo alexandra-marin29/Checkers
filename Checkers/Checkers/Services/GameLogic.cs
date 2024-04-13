@@ -289,9 +289,13 @@ namespace Checkers.Services
             }
             winner.RedWins = aux.RedWins;
             winner.WhiteWins = aux.WhiteWins;
+            if (Utility.CollectedRedPieces == 12)
+                MessageBox.Show("Game Over! The Winner is Player White! ");
+            if (Utility.CollectedWhitePieces == 12)
+                MessageBox.Show("Game Over! The Winner is Player Red! ");
+
             Utility.CollectedRedPieces = 0;
             Utility.CollectedWhitePieces = 0;
-            MessageBox.Show("You won! You are the best <3");
             Utility.ResetGame(board,this);
         }
         #endregion 
