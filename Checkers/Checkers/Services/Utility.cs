@@ -260,6 +260,8 @@ namespace Checkers.Services
                             ExtraPath = false;
                         }
                         // Read the board state
+                        gameLogic.AllowMultipleJumps = reader.ReadLine() == "1";
+
                         for (int i = 0; i < boardSize; i++)
                         {
                             string line = reader.ReadLine();
@@ -358,6 +360,9 @@ namespace Checkers.Services
                     {
                         writer.Write(NO_PIECE);
                     }
+                    writer.WriteLine();
+
+                    writer.WriteLine(gameLogic.AllowMultipleJumps ? "1" : "0");
                     writer.WriteLine();
 
                     // Write the board state

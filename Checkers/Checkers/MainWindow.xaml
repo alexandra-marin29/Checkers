@@ -60,7 +60,7 @@
                 <MenuItem Header="New Game" Command="{Binding Interactions.ResetCommand}"/>
                 <MenuItem Header="Save" Command="{Binding Interactions.SaveCommand}"/>
                 <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
-                <MenuItem Header="Allow Multiple Jump" IsCheckable="True" IsChecked="{Binding Settings.AllowMultipleJump}"/>
+                <MenuItem Header="Allow Multiple Jump" IsCheckable="True" IsChecked="{Binding Logic.AllowMultipleJumps}"/>
                 <MenuItem Header="Statistics" Command="{Binding ShowStatisticsCommand}"/>
             </MenuItem>
             <MenuItem Header="Help">

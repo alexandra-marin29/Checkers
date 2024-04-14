@@ -22,6 +22,7 @@ namespace Checkers.Services
         private Winner winner;
         private int _whitePiecesRemaining;
         private int _redPiecesRemaining;
+        private bool allowMultipleJumps;
 
         public int WhitePiecesRemaining
         {
@@ -42,7 +43,15 @@ namespace Checkers.Services
                 NotifyPropertyChanged();
             }
         }
-
+        public bool AllowMultipleJumps
+        {
+            get { return allowMultipleJumps; }
+            set
+            {
+                allowMultipleJumps = value;
+                NotifyPropertyChanged();
+            }
+        }
         public GameLogic(ObservableCollection<ObservableCollection<GameSquare>> board, PlayerTurn turn, Winner winner)
         {
             this.board = board;
