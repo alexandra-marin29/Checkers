@@ -85,28 +85,20 @@ namespace Checkers.Services
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    
-    #region Logics
-    private void SwitchTurns(GameSquare square)
-        {
-            Turn.PlayerColor = Turn.PlayerColor == PieceColor.Red ? PieceColor.White : PieceColor.Red;
 
-            // This also needs to update any UI bindings or related properties
+        #region Logics
+        private void SwitchTurns()
+        {
+            // Schimbă turnul la jucătorul opus
+            Turn.PlayerColor = Turn.PlayerColor == PieceColor.Red ? PieceColor.White : PieceColor.Red;
             NotifyPropertyChanged(nameof(Turn));
-            if (square.Piece.Color == PieceColor.Red)
-            {
-                Utility.Turn.PlayerColor = PieceColor.White;
-                Utility.Turn.TurnImage = Utility.whitePiece;
-                Turn.PlayerColor = PieceColor.White;
-                Turn.TurnImage = Utility.whitePiece;
-            }
-            else
-            {
-                Utility.Turn.PlayerColor = PieceColor.Red;
-                Utility.Turn.TurnImage = Utility.redPiece;
-                Turn.PlayerColor = PieceColor.Red;
-                Turn.TurnImage = Utility.redPiece;
-            }
+
+            // Actualizează imaginea pentru UI bazat pe noul turn
+            Turn.TurnImage = Turn.PlayerColor == PieceColor.White ? Utility.whitePiece : Utility.redPiece;
+
+            // Asigură-te că toate referințele la turn în Utility sunt actualizate
+            Utility.Turn.PlayerColor = Turn.PlayerColor;
+            Utility.Turn.TurnImage = Turn.TurnImage;
         }
 
         private void FindNeighbours(GameSquare square)
@@ -157,7 +149,7 @@ namespace Checkers.Services
                 if (Utility.ExtraMove && !Utility.ExtraPath)
                 {
                     Utility.ExtraMove = false;
-                    SwitchTurns(square);
+                    SwitchTurns();
                 }
                 else
                 {
@@ -196,6 +188,7 @@ namespace Checkers.Services
         {
             GameStarted = false; // Indicates that a new game has started
             AllowMultipleJumps = false; // Reset the "Allow Multiple Jumps" option
+            Turn.PlayerColor = PieceColor.Red;
 
             // Reset game board and piece counts
             Utility.ResetGame(board, this);
@@ -266,11 +259,27 @@ namespace Checkers.Services
                     WhitePiecesRemaining--;  // Capturing a white piece by a red piece
                 else if (square.Piece.Color == PieceColor.White)
                     RedPiecesRemaining--;  // Capturing a red piece by a white piece
+
+                // Check if additional captures are possible only if multiple jumps are allowed
+                if (AllowMultipleJumps)
+                {
+                    FindNeighbours(square);
+                    if (!Utility.ExtraPath)
+                    {
+                        Utility.ExtraMove = false;
+                        SwitchTurns(); // No further captures possible, switch turns
+                    }
+                }
+                else
+                {
+                    Utility.ExtraMove = false;
+                    SwitchTurns(); // Switch turns if multiple jumps are not allowed
+                }
             }
             else
             {
                 Utility.ExtraMove = false;
-                SwitchTurns(Utility.CurrentSquare);
+                SwitchTurns();
             }
 
             // Clear board visuals
@@ -296,21 +305,8 @@ namespace Checkers.Services
                 }
             }
 
-            // Continue extra moves or check for game over
-            if (Utility.ExtraMove && this.AllowMultipleJumps) // Only continue if multiple jumps are allowed
-            {
-                if (Turn.TurnImage == Utility.redPiece)
-                {
-                    Utility.CollectedWhitePieces++;
-                }
-                else if (Turn.TurnImage == Utility.whitePiece)
-                {
-                    Utility.CollectedRedPieces++;
-                }
-                DisplayRegularMoves(square);
-            }
-
-                if (Utility.CollectedRedPieces == 12 || Utility.CollectedWhitePieces == 12)
+            // Check for game over
+            if (WhitePiecesRemaining == 0 || RedPiecesRemaining == 0)
             {
                 GameOver();
             }
@@ -339,7 +335,7 @@ namespace Checkers.Services
         public void GameOver()
         {
             Winner stats = Utility.getScore(); // Get current scores and max pieces left
-            if (Utility.CollectedRedPieces == 12)
+            if (RedPiecesRemaining == 0)
             {
                 stats.WhiteWins++; // White wins
                 int piecesLeft = WhitePiecesRemaining; // Number of pieces left for white
@@ -349,7 +345,7 @@ namespace Checkers.Services
                 }
                 MessageBox.Show("Game Over! The Winner is Player White!");
             }
-            else if (Utility.CollectedWhitePieces == 12)
+            else if (WhitePiecesRemaining == 0)
             {
                 stats.RedWins++; // Red wins
                 int piecesLeft = RedPiecesRemaining; // Number of pieces left for red

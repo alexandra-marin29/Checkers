@@ -447,6 +447,7 @@ namespace Checkers.Services
             CollectedWhitePieces = 0;
             CollectedRedPieces = 0;
             Turn.PlayerColor = PieceColor.Red;
+            Turn.TurnImage = Utility.redPiece;
 
             // Reset the game board to its initial state
             ResetGameBoard(squares);
