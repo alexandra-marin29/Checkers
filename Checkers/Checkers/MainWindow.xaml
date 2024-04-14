@@ -15,6 +15,7 @@
     </Window.DataContext>
     <Window.Resources>
         <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\FACULTATE_AN_2\MVP\CheckersGame_Tema2\Checkers\Checkers\Resources\default.png"/>
+        <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -55,12 +56,15 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <Menu Margin="0,0,0,700" DockPanel.Dock="Top" Background="FloralWhite">
+        <Menu Margin="0,0,0,700" DockPanel.Dock="Top" Background="FloralWhite" FontSize="14" FontWeight="DemiBold">
             <MenuItem Header="File">
                 <MenuItem Header="New Game" Command="{Binding Interactions.ResetCommand}"/>
                 <MenuItem Header="Save" Command="{Binding Interactions.SaveCommand}"/>
                 <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
-                <MenuItem Header="Allow Multiple Jump" IsCheckable="True" IsChecked="{Binding Logic.AllowMultipleJumps}"/>
+                <MenuItem Header="Allow Multiple Jump"
+                  IsCheckable="True"
+                  IsChecked="{Binding Logic.AllowMultipleJumps, Mode=TwoWay}"
+                  IsEnabled="{Binding Logic.GameStarted, Converter={StaticResource InverseBooleanConverter}}"/>
                 <MenuItem Header="Statistics" Command="{Binding ShowStatisticsCommand}"/>
             </MenuItem>
             <MenuItem Header="Help">

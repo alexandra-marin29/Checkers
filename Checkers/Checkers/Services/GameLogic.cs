@@ -25,6 +25,21 @@ namespace Checkers.Services
 
         private bool allowMultipleJumps;
 
+        private bool gameStarted;
+
+        public bool GameStarted
+        {
+            get => gameStarted;
+            set
+            {
+                if (gameStarted != value)
+                {
+                    gameStarted = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public bool AllowMultipleJumps
         {
             get { return allowMultipleJumps; }
@@ -179,7 +194,14 @@ namespace Checkers.Services
 
         public void ResetGame()
         {
-            Utility.ResetGame(board,this);
+            GameStarted = false; // Indicates that a new game has started
+            AllowMultipleJumps = false; // Reset the "Allow Multiple Jumps" option
+
+            // Reset game board and piece counts
+            Utility.ResetGame(board, this);
+
+            // Notify UI about the change in the 'AllowMultipleJumps' property
+            NotifyPropertyChanged(nameof(AllowMultipleJumps));
         }
 
         public void SaveGame()
@@ -198,7 +220,7 @@ namespace Checkers.Services
             {
                 Turn.TurnImage = Utility.whitePiece;
             }
-
+            CheckForWin();
         }
 
         public void About()
@@ -217,6 +239,11 @@ namespace Checkers.Services
 
         public void MovePiece(GameSquare square)
         {
+            if (!GameStarted)
+            {
+                GameStarted = true; // Set game as started when the first move is made
+            }
+
             if (Utility.CurrentSquare == null || Utility.CurrentSquare.Piece == null)
             {
                 MessageBox.Show("No piece selected to move, or the selected piece is invalid.");
@@ -294,6 +321,19 @@ namespace Checkers.Services
             RedPiecesRemaining = 12;
             WhitePiecesRemaining = 12;
         }
+
+        public void CheckForWin()
+        {
+            if (WhitePiecesRemaining == 0 || Utility.CollectedRedPieces == 12)
+            {
+                GameOver();
+            }
+            else if (RedPiecesRemaining == 0 || Utility.CollectedWhitePieces == 12)
+            {
+                GameOver();
+            }
+        }
+
 
 
         public void GameOver()

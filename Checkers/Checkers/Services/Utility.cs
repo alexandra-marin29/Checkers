@@ -260,6 +260,8 @@ namespace Checkers.Services
                             ExtraPath = false;
                         }
                         // Read the board state
+                        Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); // Load the collected red pieces
+                        Utility.CollectedWhitePieces = int.Parse(reader.ReadLine());
                         gameLogic.AllowMultipleJumps = reader.ReadLine() == "1";
 
                         for (int i = 0; i < boardSize; i++)
@@ -293,6 +295,8 @@ namespace Checkers.Services
                             MessageBox.Show("End of data marker '-' not found.");
                             return;
                         }
+                        gameLogic.CheckForWin();
+
                     }
                 }
                 catch (Exception ex)
@@ -362,8 +366,9 @@ namespace Checkers.Services
                     }
                     writer.WriteLine();
 
+                    writer.WriteLine(Utility.CollectedRedPieces); // Save the collected red pieces
+                    writer.WriteLine(Utility.CollectedWhitePieces);
                     writer.WriteLine(gameLogic.AllowMultipleJumps ? "1" : "0");
-                    writer.WriteLine();
 
                     // Write the board state
                     foreach (var line in squares)
