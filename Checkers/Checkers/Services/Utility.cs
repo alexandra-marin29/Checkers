@@ -15,7 +15,6 @@ namespace Checkers.Services
     public class Utility
     {
         #region constValues
-        //const image paths
         public const string redSquare = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\squareRed.png";
         public const string whiteSquare = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\squareWhite.png";
         public const string redPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceRed.png";
@@ -24,7 +23,7 @@ namespace Checkers.Services
         public const string redKingPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceRedKing.png";
         public const string whiteKingPiece = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\pieceWhiteKing.png";
         public const string SQUARE_HIGHLIGHT = "NULL";
-        //const values for serialization
+
         public const char NO_PIECE = 'N';
         public const char WHITE_PIECE = 'W';
         public const char RED_PIECE = 'R';
@@ -34,7 +33,7 @@ namespace Checkers.Services
         public const char RED_TURN = '1';
         public const char HAD_COMBO = 'H';
         public const char EXTRA_PATH = 'E';
-        //board constants
+
         public const int boardSize = 8;
         #endregion
         #region staticValues
@@ -212,7 +211,6 @@ namespace Checkers.Services
                 {
                     using (StreamReader reader = new StreamReader(path))
                     {
-                        // Read and set the number of remaining red and white pieces
                         if (!int.TryParse(reader.ReadLine(), out int redPiecesRemaining))
                         {
                             MessageBox.Show("Error parsing red pieces remaining.");
@@ -227,7 +225,6 @@ namespace Checkers.Services
                         }
                         gameLogic.WhitePiecesRemaining = whitePiecesRemaining;
 
-                        // Read and set the current player's turn
                         string playerTurn = reader.ReadLine();
                         if (!Enum.TryParse(playerTurn, true, out PieceColor turnColor))
                         {
@@ -259,8 +256,8 @@ namespace Checkers.Services
                         {
                             ExtraPath = false;
                         }
-                        // Read the board state
-                        Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); // Load the collected red pieces
+
+                        Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); 
                         Utility.CollectedWhitePieces = int.Parse(reader.ReadLine());
                         gameLogic.AllowMultipleJumps = reader.ReadLine() == "1";
 
@@ -281,7 +278,6 @@ namespace Checkers.Services
                                     GamePiece piece = ParsePieceType(pieceType, i, j);
                                     squares[i][j].Piece = piece;
                                 }
-                                // If the pieceType is NO_PIECE, set the square's piece to null
                                 else
                                 {
                                     squares[i][j].Piece = null;
@@ -289,7 +285,6 @@ namespace Checkers.Services
                             }
                         }
 
-                        // Check for the end-of-data marker
                         if (reader.ReadLine() != "-")
                         {
                             MessageBox.Show("End of data marker '-' not found.");
@@ -329,23 +324,11 @@ namespace Checkers.Services
                 var path = saveDialog.FileName;
                 using (var writer = new StreamWriter(path))
                 {
-                    // Write the current state of the game from the gameLogic instance
                     writer.WriteLine(gameLogic.RedPiecesRemaining);
                     writer.WriteLine(gameLogic.WhitePiecesRemaining);
                     writer.WriteLine(gameLogic.Turn.PlayerColor == PieceColor.Red ? "Red" : "White");
 
-                    // Write the current square if applicable
-                    //if (CurrentSquare != null)
-                    //{
-                    //    writer.Write(CurrentSquare.Row.ToString() + CurrentSquare.Column.ToString());
-                    //}
-                    //else
-                    //{
-                    //    writer.Write(NO_PIECE);
-                    //}
-                    //writer.WriteLine();
-
-                    // Write flags for extra moves and paths
+                   
                     if (ExtraMove)
                     {
                         writer.Write(HAD_COMBO);
@@ -366,11 +349,10 @@ namespace Checkers.Services
                     }
                     writer.WriteLine();
 
-                    writer.WriteLine(Utility.CollectedRedPieces); // Save the collected red pieces
+                    writer.WriteLine(Utility.CollectedRedPieces); 
                     writer.WriteLine(Utility.CollectedWhitePieces);
                     writer.WriteLine(gameLogic.AllowMultipleJumps ? "1" : "0");
 
-                    // Write the board state
                     foreach (var line in squares)
                     {
                         foreach (var square in line)
@@ -399,19 +381,7 @@ namespace Checkers.Services
                         writer.WriteLine();
                     }
 
-                    // Write neighbors
-                    //foreach (var square in CurrentNeighbours.Keys)
-                    //{
-                    //    if (CurrentNeighbours[square] == null)
-                    //    {
-                    //        writer.Write(square.Row.ToString() + square.Column.ToString() + NO_PIECE);
-                    //    }
-                    //    else
-                    //    {
-                    //        writer.Write(square.Row.ToString() + square.Column.ToString() + CurrentNeighbours[square].Row.ToString() + CurrentNeighbours[square].Column.ToString());
-                    //    }
-                    //    writer.WriteLine();
-                    //}
+              
                     writer.Write("-\n");
                 }
             }
@@ -421,9 +391,8 @@ namespace Checkers.Services
         {
             if (GameLogicInstance == null)
             {
-                // Assuming you want to start scores from zero
                 Winner initialWinner = new Winner(0, 0);
-                PlayerTurn initialTurn = new PlayerTurn(PieceColor.Red); // or some logic to decide the starting color
+                PlayerTurn initialTurn = new PlayerTurn(PieceColor.Red); 
                 GameLogicInstance = new GameLogic(initBoard(), initialTurn, initialWinner);
             }
         }
@@ -449,10 +418,8 @@ namespace Checkers.Services
             Turn.PlayerColor = PieceColor.Red;
             Turn.TurnImage = Utility.redPiece;
 
-            // Reset the game board to its initial state
             ResetGameBoard(squares);
 
-            // Reset the piece counts via GameLogic
             if (gameLogic != null)
             {
                 gameLogic.ResetPieceCounts();
@@ -464,8 +431,7 @@ namespace Checkers.Services
         #region Credits
         public static void About()
         {
-            //string PATH = Path.GetDirectoryName(System.Environment.CurrentDirectory);
-            //PATH = Directory.GetParent(PATH).FullName + @"\Resources\about.txt";
+           
             string PATH = "D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\about.txt";
 
             using (var reader = new StreamReader(PATH))

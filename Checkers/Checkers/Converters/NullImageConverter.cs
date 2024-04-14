@@ -17,7 +17,6 @@ namespace Checkers.Converters
         {
             if (value == null || String.IsNullOrWhiteSpace(value.ToString()))
             {
-                Debug.WriteLine($"Default image used for null or whitespace value: {value}");
                 return DefaultImage;
             }
             return value;

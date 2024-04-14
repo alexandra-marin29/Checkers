@@ -18,8 +18,6 @@ namespace Checkers.Models
         {
             this.color = color;
             TurnImage = color == PieceColor.White ? Utility.whitePiece : Utility.redPiece;
-
-            //loadImages();
         }
 
         public void loadImages()
