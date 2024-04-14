@@ -22,7 +22,18 @@ namespace Checkers.Services
         private Winner winner;
         private int _whitePiecesRemaining;
         private int _redPiecesRemaining;
+
         private bool allowMultipleJumps;
+
+        public bool AllowMultipleJumps
+        {
+            get { return allowMultipleJumps; }
+            set
+            {
+                allowMultipleJumps = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public int WhitePiecesRemaining
         {
@@ -43,15 +54,7 @@ namespace Checkers.Services
                 NotifyPropertyChanged();
             }
         }
-        public bool AllowMultipleJumps
-        {
-            get { return allowMultipleJumps; }
-            set
-            {
-                allowMultipleJumps = value;
-                NotifyPropertyChanged();
-            }
-        }
+
         public GameLogic(ObservableCollection<ObservableCollection<GameSquare>> board, PlayerTurn turn, Winner winner)
         {
             this.board = board;
@@ -229,7 +232,7 @@ namespace Checkers.Services
             {
                 // Remove the captured piece
                 Utility.CurrentNeighbours[square].Piece = null;
-                Utility.ExtraMove = true;
+                Utility.ExtraMove = true; // Indicates an extra move is possible
 
                 // Decrement the count of the captured pieces
                 if (square.Piece.Color == PieceColor.Red)
@@ -267,7 +270,7 @@ namespace Checkers.Services
             }
 
             // Continue extra moves or check for game over
-            if (Utility.ExtraMove)
+            if (Utility.ExtraMove && this.AllowMultipleJumps) // Only continue if multiple jumps are allowed
             {
                 if (Turn.TurnImage == Utility.redPiece)
                 {
@@ -280,7 +283,7 @@ namespace Checkers.Services
                 DisplayRegularMoves(square);
             }
 
-            if (Utility.CollectedRedPieces == 12 || Utility.CollectedWhitePieces == 12)
+                if (Utility.CollectedRedPieces == 12 || Utility.CollectedWhitePieces == 12)
             {
                 GameOver();
             }
