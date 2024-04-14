@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Checkers.Services
@@ -417,7 +418,11 @@ namespace Checkers.Services
             CollectedRedPieces = 0;
             Turn.PlayerColor = PieceColor.Red;
             Turn.TurnImage = Utility.redPiece;
+            gameLogic.GameStarted = false;
+            gameLogic.AllowMultipleJumps = false;
 
+            gameLogic.NotifyPropertyChanged(nameof(gameLogic.GameStarted));
+            gameLogic.NotifyPropertyChanged(nameof(gameLogic.AllowMultipleJumps));
             ResetGameBoard(squares);
 
             if (gameLogic != null)

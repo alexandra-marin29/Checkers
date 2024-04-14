@@ -81,7 +81,7 @@ namespace Checkers.Services
             RedPiecesRemaining = 12;
         }
 
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -185,10 +185,9 @@ namespace Checkers.Services
         {
             GameStarted = false;
             AllowMultipleJumps = false;
-            Turn.PlayerColor = PieceColor.Red;
-
             Utility.ResetGame(board, this);
 
+            NotifyPropertyChanged(nameof(GameStarted));
             NotifyPropertyChanged(nameof(AllowMultipleJumps));
         }
 
@@ -229,7 +228,9 @@ namespace Checkers.Services
         {
             if (!GameStarted)
             {
-                GameStarted = true; 
+                GameStarted = true;
+                NotifyPropertyChanged(nameof(GameStarted));
+
             }
 
             if (Utility.CurrentSquare == null || Utility.CurrentSquare.Piece == null)
@@ -290,6 +291,18 @@ namespace Checkers.Services
                     square.Piece.Type = PieceType.King;
                     square.Piece.Texture = square.Piece.Color == PieceColor.Red ? Utility.redKingPiece : Utility.whiteKingPiece;
                 }
+            }
+            if (Utility.ExtraMove && this.AllowMultipleJumps) // Only continue if multiple jumps are allowed
+            {
+                if (Turn.TurnImage == Utility.redPiece)
+                {
+                    Utility.CollectedWhitePieces++;
+                }
+                else if (Turn.TurnImage == Utility.whitePiece)
+                {
+                    Utility.CollectedRedPieces++;
+                }
+                DisplayRegularMoves(square);
             }
 
             if (WhitePiecesRemaining == 0 || RedPiecesRemaining == 0)
