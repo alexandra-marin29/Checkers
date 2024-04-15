@@ -258,7 +258,21 @@ namespace Checkers.Services
                             ExtraPath = false;
                         }
 
-                        Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); 
+                        string extraMoveLine = reader.ReadLine();
+                        if (extraMoveLine == HAD_COMBO.ToString())
+                        {
+                            ExtraMove = true;
+                            string[] position = reader.ReadLine().Split(',');
+                            int row = int.Parse(position[0]);
+                            int column = int.Parse(position[1]);
+                            CurrentSquare = squares[row][column];
+                            gameLogic.FindNeighbours(CurrentSquare);
+                        }
+                        else
+                        {
+                            ExtraMove = false;
+                        }
+                            Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); 
                         Utility.CollectedWhitePieces = int.Parse(reader.ReadLine());
                         gameLogic.AllowMultipleJumps = reader.ReadLine() == "1";
                         gameLogic.GameStarted = true;
@@ -334,10 +348,14 @@ namespace Checkers.Services
                     if (ExtraMove)
                     {
                         writer.Write(HAD_COMBO);
+                        writer.WriteLine($"{CurrentSquare.Row},{CurrentSquare.Column}");
+
                     }
                     else
                     {
                         writer.Write(NO_PIECE);
+                        writer.WriteLine();
+
                     }
                     writer.WriteLine();
 

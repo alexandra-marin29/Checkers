@@ -98,7 +98,7 @@ namespace Checkers.Services
             Utility.Turn.TurnImage = Turn.TurnImage;
         }
 
-        private void FindNeighbours(GameSquare square)
+        public void FindNeighbours(GameSquare square)
         {
             var neighboursToCheck = new HashSet<Tuple<int, int>>();
 
