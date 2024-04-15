@@ -63,7 +63,7 @@
                 <MenuItem Header="Open" Command="{Binding Interactions.LoadCommand}"/>
                 <MenuItem Header="Allow Multiple Jump"
                   IsCheckable="True"
-                  IsChecked="{Binding Logic.AllowMultipleJumps, Mode=TwoWay}"
+                  IsChecked="{Binding Logic.AllowMultipleJumps, Mode=OneWay}"
                   IsEnabled="{Binding Logic.GameStarted, Converter={StaticResource InverseBooleanConverter}}"/>
                 <MenuItem Header="Statistics" Command="{Binding ShowStatisticsCommand}"/>
             </MenuItem>

@@ -261,6 +261,7 @@ namespace Checkers.Services
                         Utility.CollectedRedPieces = int.Parse(reader.ReadLine()); 
                         Utility.CollectedWhitePieces = int.Parse(reader.ReadLine());
                         gameLogic.AllowMultipleJumps = reader.ReadLine() == "1";
+                        gameLogic.GameStarted = true;
 
                         for (int i = 0; i < boardSize; i++)
                         {
@@ -350,8 +351,10 @@ namespace Checkers.Services
                     }
                     writer.WriteLine();
 
-                    writer.WriteLine(Utility.CollectedRedPieces); 
-                    writer.WriteLine(Utility.CollectedWhitePieces);
+                    int collectedRed = 12 - gameLogic.RedPiecesRemaining;
+                    int collectedWhite = 12 - gameLogic.WhitePiecesRemaining;
+                    writer.WriteLine(collectedRed); 
+                    writer.WriteLine(collectedWhite);
                     writer.WriteLine(gameLogic.AllowMultipleJumps ? "1" : "0");
 
                     foreach (var line in squares)
