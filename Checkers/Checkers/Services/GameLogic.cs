@@ -185,6 +185,8 @@ namespace Checkers.Services
         {
             GameStarted = false;
             AllowMultipleJumps = false;
+            Turn.PlayerColor = PieceColor.Red;
+            Turn.TurnImage = Utility.redPiece;
             Utility.ResetGame(board, this);
 
             NotifyPropertyChanged(nameof(GameStarted));
@@ -355,6 +357,8 @@ namespace Checkers.Services
                 MessageBox.Show("Game Over! The Winner is Player Red!");
             }
 
+            Turn.PlayerColor = PieceColor.Red;
+            Turn.TurnImage = Utility.redPiece;
             Utility.writeScore(stats);
             Utility.ResetGame(board, this);
         }

@@ -14,7 +14,7 @@
         <local:GameVM/>
     </Window.DataContext>
     <Window.Resources>
-        <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\FACULTATE_AN_2\MVP\CheckersGame_Tema2\Checkers\Checkers\Resources\default.png"/>
+        <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\FACULTATE_AN_2\MVP\CheckersGame_Tema2\Checkers\Checkers\Resources\default.png" />
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
 
@@ -38,14 +38,14 @@
 
                                         <Button.Template>
                                             <ControlTemplate>
-                                                <Image Source="{Binding GenericSquare.Piece.Texture, Converter={StaticResource NullImageConverter}}" Height="70" Width="70"/>
+                                                <Image Source="{Binding GenericSquare.Piece.Texture, Converter={StaticResource NullImageConverter}}" Height="70" Width="70" />
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
                                     <Button Command="{Binding MovePieceCommand}" CommandParameter="{Binding GenericSquare}">
                                         <Button.Template>
                                             <ControlTemplate>
-                                                <Image Source="{Binding GenericSquare.LegalSquareSymbol, Converter={StaticResource NullImageConverter}}" Height="20" Width="20"/>
+                                                <Image Source="{Binding GenericSquare.LegalSquareSymbol, Converter={StaticResource NullImageConverter}}" Height="40" Width="40"/>
                                             </ControlTemplate>
                                         </Button.Template>
                                     </Button>
