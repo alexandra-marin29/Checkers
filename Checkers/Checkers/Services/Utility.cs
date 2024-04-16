@@ -159,14 +159,14 @@ namespace Checkers.Services
                     {
                         squares[index1][index2].Piece = new GamePiece(PieceColor.White);
                         squares[index1][index2].Piece.Square = squares[index1][index2];
-                        //pieces
+                       
                     }
                     else
                         if (index1 > 4)
                     {
                         squares[index1][index2].Piece = new GamePiece(PieceColor.Red);
                         squares[index1][index2].Piece.Square = squares[index1][index2];
-                        //pieces
+                        
                     }
                     else
                     {

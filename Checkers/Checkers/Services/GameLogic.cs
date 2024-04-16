@@ -294,7 +294,7 @@ namespace Checkers.Services
                     square.Piece.Texture = square.Piece.Color == PieceColor.Red ? Utility.redKingPiece : Utility.whiteKingPiece;
                 }
             }
-            if (Utility.ExtraMove && this.AllowMultipleJumps) // Only continue if multiple jumps are allowed
+            if (Utility.ExtraMove && this.AllowMultipleJumps)
             {
                 if (Turn.TurnImage == Utility.redPiece)
                 {

@@ -3,14 +3,13 @@ Email: alexandra-a.marin@student.unitbv.ro
 
 ___________________________________________________
 
-A game of checkers implemented in C# using the MVVM design pattern, intended to be played on an 8x8 board. 
-Players can use two types of pieces:
+This checkers game is crafted in C# using the MVVM (Model-View-ViewModel) architecture, suitable for two players on an 8x8 board. The game includes two distinct types of pieces:
 
-Man: a basic piece that moves one square forward diagonally and can jump over opposing pieces. It has an optional feature for multiple jumps which can be enabled or disabled by the player.
-King: a piece that advances to the furthest row and gains the ability to move both forwards and backwards.
-The game concludes when a player loses all their pieces, thereby declaring the opponent the winner.
+Man: This basic game piece can move diagonally forward by one square and has the capability to leap over opponent pieces. It features an optional multiple jumps setting, which players can activate or deactivate as desired.
+King: Upon reaching the farthest row from its starting position, a piece is crowned a King, granting it the ability to move both forwards and backwards.
+The game ends when a player has no pieces left, resulting in victory for their opponent.
 
-The program features two primary menus:
+The app includes two main menus:
 
-File, which includes options like New Game, Save, Open, Allow Multiple Jumps, and Statistics.
-Help, which provides details about the game in the About submenu.
+File: This menu provides options such as New Game, Save, Open, Allow Multiple Jumps, and Statistics.
+Help: Offers additional information about the game under the About submenu.
