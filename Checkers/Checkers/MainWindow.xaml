@@ -14,7 +14,7 @@
         <local:GameVM/>
     </Window.DataContext>
     <Window.Resources>
-        <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\FACULTATE_AN_2\MVP\CheckersGame_Tema2\Checkers\Checkers\Resources\default.png" />
+        <converter:NullImageConverter x:Key="NullImageConverter" DefaultImage="D:\\FACULTATE_AN_2\\MVP\\CheckersGame_Tema2\\Checkers\\Checkers\\Resources\\default.png" ImageWidth="1" ImageHeight="2000" />
         <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
 
